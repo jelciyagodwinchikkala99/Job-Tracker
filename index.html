@@ -1,11 +1,47 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Job Application Tracker</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>Job Tracker</h1>
+  <main class="wrap">
+    <h1>Job application tracker</h1>
+    <p class="sub">Log each application and update its status as you hear back.</p>
+
+    <section id="stats"></section>
+
+    <form id="app-form">
+      <label>Company <input id="company" required></label>
+      <label>Role <input id="role" required></label>
+      <label>Date applied <input id="date" type="date" required></label>
+      <label>Status
+        <select id="status">
+          <option>Applied</option>
+          <option>Interview</option>
+          <option>Offer</option>
+          <option>Rejected</option>
+        </select>
+      </label>
+      <button type="submit">Add application</button>
+    </form>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Company</th>
+          <th>Role</th>
+          <th>Applied</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </main>
+
+  <script src="app.js"></script>
 </body>
 </html>
