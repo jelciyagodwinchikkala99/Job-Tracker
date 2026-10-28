@@ -5,7 +5,8 @@ let applications = JSON.parse(localStorage.getItem("applications")) || [];
 
 const form = document.getElementById("app-form");
 const rows = document.getElementById("rows");
-
+const searchInput = document.getElementById("search");
+const filterSelect = document.getElementById("filter");
 // Save the list to the browser
 function save() {
   localStorage.setItem("applications", JSON.stringify(applications));
@@ -54,7 +55,17 @@ function render() {
       renderStats();
   rows.innerHTML = "";
 
-  applications.forEach(function (app) {
+    const visible = applications.filter(function (app) {
+    const matchesStatus =
+      filterSelect.value === "All" || app.status === filterSelect.value;
+
+    const text = (app.company + " " + app.role + " " + (app.location || "")).toLowerCase();
+    const matchesSearch = text.includes(searchInput.value.toLowerCase());
+
+    return matchesStatus && matchesSearch;
+  });
+
+  visible.forEach(function (app) {
     const tr = document.createElement("tr");
 
     const company = document.createElement("td");
@@ -124,3 +135,5 @@ form.addEventListener("submit", function (event) {
 });
 
 render();
+searchInput.addEventListener("input", render);
+filterSelect.addEventListener("change", render);

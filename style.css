@@ -74,3 +74,12 @@ th, td {
 .status-Interview { background: #fdf0d9; color: #b45309; }
 .status-Offer { background: #dcf3e3; color: #15803d; }
 .status-Rejected { background: #fbe1e1; color: #b91c1c; }
+.toolbar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.toolbar input {
+  flex: 1;
+}
