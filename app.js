@@ -137,3 +137,33 @@ form.addEventListener("submit", function (event) {
 render();
 searchInput.addEventListener("input", render);
 filterSelect.addEventListener("change", render);
+// Demo data for first-time visitors
+function daysAgo(n) {
+  const d = new Date();
+  d.setDate(d.getDate() - n);
+  return d.toISOString().slice(0, 10);
+}
+
+document.getElementById("load-sample").addEventListener("click", function () {
+  const samples = [
+    ["Northwind", "Data Analyst", "Dallas, TX", 14, "Interview"],
+    ["Contoso", "Product Analyst", "Remote", 10, "Rejected"],
+    ["Fabrikam", "BI Developer", "Austin, TX", 5, "Applied"],
+    ["Tailspin", "Analytics Engineer", "Chicago, IL", 21, "Offer"],
+    ["Adventure Works", "Data Scientist", "Remote", 3, "Applied"],
+  ];
+
+  samples.forEach(function (s, i) {
+    applications.push({
+      id: Date.now() + i,
+      company: s[0],
+      role: s[1],
+      location: s[2],
+      date: daysAgo(s[3]),
+      status: s[4],
+    });
+  });
+
+  save();
+  render();
+});

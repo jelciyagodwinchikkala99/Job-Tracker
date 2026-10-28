@@ -83,3 +83,6 @@ th, td {
 .toolbar input {
   flex: 1;
 }
+.toolbar button {
+  white-space: nowrap;
+}
