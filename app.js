@@ -10,9 +10,48 @@ const rows = document.getElementById("rows");
 function save() {
   localStorage.setItem("applications", JSON.stringify(applications));
 }
+// Draw the summary cards
+function renderStats() {
+  const stats = document.getElementById("stats");
 
+  function count(status) {
+    return applications.filter(function (a) {
+      return a.status === status;
+    }).length;
+  }
+
+  const offers = count("Offer");
+  const rejected = count("Rejected");
+  const decided = offers + rejected;
+  const offerRate = decided ? Math.round((offers / decided) * 100) + "%" : "–";
+
+  const cards = [
+    ["Total", applications.length],
+    ["Applied", count("Applied")],
+    ["Interviews", count("Interview")],
+    ["Offers", offers],
+    ["Rejected", rejected],
+    ["Offer rate", offerRate],
+  ];
+
+  stats.innerHTML = "";
+  cards.forEach(function (card) {
+    const div = document.createElement("div");
+    div.className = "stat";
+
+    const number = document.createElement("b");
+    number.textContent = card[1];
+
+    const label = document.createElement("span");
+    label.textContent = card[0];
+
+    div.append(number, label);
+    stats.appendChild(div);
+  });
+}
 // Draw the table from the list
 function render() {
+      renderStats();
   rows.innerHTML = "";
 
   applications.forEach(function (app) {
@@ -23,6 +62,9 @@ function render() {
 
     const role = document.createElement("td");
     role.textContent = app.role;
+
+    const location = document.createElement("td");
+    location.textContent = app.location || "–";
 
     const date = document.createElement("td");
     date.textContent = app.date;
@@ -57,7 +99,7 @@ function render() {
     });
     deleteCell.appendChild(deleteBtn);
 
-    tr.append(company, role, date, statusCell, deleteCell);
+    tr.append(company, role, location, date, statusCell, deleteCell);
     rows.appendChild(tr);
   });
 }
@@ -70,6 +112,7 @@ form.addEventListener("submit", function (event) {
     id: Date.now(),
     company: document.getElementById("company").value.trim(),
     role: document.getElementById("role").value.trim(),
+    location: document.getElementById("location").value.trim(),
     date: document.getElementById("date").value,
     status: document.getElementById("status").value,
   };
