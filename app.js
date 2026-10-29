@@ -63,6 +63,21 @@ function renderChart() {
   }
 
   const counts = STATUSES.map(function (s) {
+  const total = counts.reduce(function (sum, n) {
+    return sum + n;
+  }, 0);
+
+  const emptyMsg = document.getElementById("chart-empty");
+  if (emptyMsg) emptyMsg.hidden = total > 0;
+  canvas.style.display = total > 0 ? "" : "none";
+
+  if (total === 0) {
+    if (statusChart) {
+      statusChart.destroy();
+      statusChart = null;
+    }
+    return;
+  }
     return applications.filter(function (a) {
       return a.status === s;
     }).length;
@@ -210,3 +225,4 @@ searchInput.addEventListener("input", render);
 filterSelect.addEventListener("change", render);
 
 render();
+localStorage.removeItem("applications")

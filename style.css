@@ -110,3 +110,9 @@ th, td {
   margin-bottom: 20px;
   height: 260px;
 }
+.chart-empty {
+  text-align: center;
+  color: #5d6b78;
+  margin: 0;
+  padding-top: 100px;
+}
