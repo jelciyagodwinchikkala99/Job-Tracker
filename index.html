@@ -12,10 +12,12 @@
     <p class="sub">Log each application and update its status as you hear back.</p>
 
     <section id="stats"></section>
-<div class="chart-box">
-  <canvas id="status-chart"></canvas>
-  <p id="chart-empty" class="chart-empty" hidden>No applications yet. Add one or load sample data.</p>
-</div>
+
+    <div class="chart-box">
+      <canvas id="status-chart"></canvas>
+      <p id="chart-empty" class="chart-empty" hidden>No applications yet. Add one or load sample data.</p>
+    </div>
+
     <form id="app-form">
       <label>Company <input id="company" required></label>
       <label>Role <input id="role" required></label>
@@ -31,17 +33,20 @@
       </label>
       <button type="submit">Add application</button>
     </form>
-<div class="toolbar">
-  <input id="search" placeholder="Search company, role, or location">
-  <select id="filter">
-    <option>All</option>
-    <option>Applied</option>
-    <option>Interview</option>
-    <option>Offer</option>
-    <option>Rejected</option>
-  </select>
-  <button type="button" id="load-sample">Load sample data</button>
-</div>
+
+    <div class="toolbar">
+      <input id="search" placeholder="Search company, role, or location">
+      <select id="filter">
+        <option>All</option>
+        <option>Applied</option>
+        <option>Interview</option>
+        <option>Offer</option>
+        <option>Rejected</option>
+      </select>
+      <button type="button" id="load-sample">Load sample data</button>
+      <button type="button" id="clear-all">Clear all</button>
+    </div>
+
     <table>
       <thead>
         <tr>
@@ -56,7 +61,8 @@
       <tbody id="rows"></tbody>
     </table>
   </main>
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
-<script src="app.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>

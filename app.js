@@ -1,6 +1,5 @@
 const STATUSES = ["Applied", "Interview", "Offer", "Rejected"];
 
-// Load saved data, or start with an empty list
 let applications = JSON.parse(localStorage.getItem("applications")) || [];
 
 const form = document.getElementById("app-form");
@@ -8,12 +7,10 @@ const rows = document.getElementById("rows");
 const searchInput = document.getElementById("search");
 const filterSelect = document.getElementById("filter");
 
-// Save the list to the browser
 function save() {
   localStorage.setItem("applications", JSON.stringify(applications));
 }
 
-// Draw the summary cards
 function renderStats() {
   const stats = document.getElementById("stats");
 
@@ -53,16 +50,20 @@ function renderStats() {
   });
 }
 
-// Draw the status chart
 let statusChart = null;
 
 function renderChart() {
   const canvas = document.getElementById("status-chart");
   if (!canvas || typeof Chart === "undefined") {
-    return; // chart library or canvas missing, skip quietly
+    return;
   }
 
   const counts = STATUSES.map(function (s) {
+    return applications.filter(function (a) {
+      return a.status === s;
+    }).length;
+  });
+
   const total = counts.reduce(function (sum, n) {
     return sum + n;
   }, 0);
@@ -71,20 +72,13 @@ function renderChart() {
   if (emptyMsg) emptyMsg.hidden = total > 0;
   canvas.style.display = total > 0 ? "" : "none";
 
-  if (total === 0) {
-    if (statusChart) {
-      statusChart.destroy();
-      statusChart = null;
-    }
-    return;
-  }
-    return applications.filter(function (a) {
-      return a.status === s;
-    }).length;
-  });
-
   if (statusChart) {
     statusChart.destroy();
+    statusChart = null;
+  }
+
+  if (total === 0) {
+    return;
   }
 
   statusChart = new Chart(canvas, {
@@ -106,7 +100,6 @@ function renderChart() {
   });
 }
 
-// Draw the table from the list
 function render() {
   renderStats();
   renderChart();
@@ -137,7 +130,6 @@ function render() {
     const date = document.createElement("td");
     date.textContent = app.date;
 
-    // Status dropdown
     const statusCell = document.createElement("td");
     const select = document.createElement("select");
     select.className = "status-" + app.status;
@@ -154,7 +146,6 @@ function render() {
     });
     statusCell.appendChild(select);
 
-    // Delete button
     const deleteCell = document.createElement("td");
     const deleteBtn = document.createElement("button");
     deleteBtn.textContent = "Delete";
@@ -172,7 +163,6 @@ function render() {
   });
 }
 
-// Handle the form
 form.addEventListener("submit", function (event) {
   event.preventDefault();
 
@@ -190,7 +180,6 @@ form.addEventListener("submit", function (event) {
   form.reset();
 });
 
-// Demo data for first-time visitors
 function daysAgo(n) {
   const d = new Date();
   d.setDate(d.getDate() - n);
@@ -221,8 +210,15 @@ document.getElementById("load-sample").addEventListener("click", function () {
   render();
 });
 
+document.getElementById("clear-all").addEventListener("click", function () {
+  if (confirm("Delete all applications? This cannot be undone.")) {
+    applications = [];
+    save();
+    render();
+  }
+});
+
 searchInput.addEventListener("input", render);
 filterSelect.addEventListener("change", render);
 
 render();
-localStorage.removeItem("applications")
