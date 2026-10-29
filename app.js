@@ -7,10 +7,12 @@ const form = document.getElementById("app-form");
 const rows = document.getElementById("rows");
 const searchInput = document.getElementById("search");
 const filterSelect = document.getElementById("filter");
+
 // Save the list to the browser
 function save() {
   localStorage.setItem("applications", JSON.stringify(applications));
 }
+
 // Draw the summary cards
 function renderStats() {
   const stats = document.getElementById("stats");
@@ -50,12 +52,52 @@ function renderStats() {
     stats.appendChild(div);
   });
 }
+
+// Draw the status chart
+let statusChart = null;
+
+function renderChart() {
+  const canvas = document.getElementById("status-chart");
+  if (!canvas || typeof Chart === "undefined") {
+    return; // chart library or canvas missing, skip quietly
+  }
+
+  const counts = STATUSES.map(function (s) {
+    return applications.filter(function (a) {
+      return a.status === s;
+    }).length;
+  });
+
+  if (statusChart) {
+    statusChart.destroy();
+  }
+
+  statusChart = new Chart(canvas, {
+    type: "doughnut",
+    data: {
+      labels: STATUSES,
+      datasets: [
+        {
+          data: counts,
+          backgroundColor: ["#94a3b8", "#f59e0b", "#22c55e", "#ef4444"],
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { position: "right" } },
+    },
+  });
+}
+
 // Draw the table from the list
 function render() {
-      renderStats();
+  renderStats();
+  renderChart();
   rows.innerHTML = "";
 
-    const visible = applications.filter(function (app) {
+  const visible = applications.filter(function (app) {
     const matchesStatus =
       filterSelect.value === "All" || app.status === filterSelect.value;
 
@@ -119,24 +161,20 @@ function render() {
 form.addEventListener("submit", function (event) {
   event.preventDefault();
 
-  const application = {
+  applications.push({
     id: Date.now(),
     company: document.getElementById("company").value.trim(),
     role: document.getElementById("role").value.trim(),
     location: document.getElementById("location").value.trim(),
     date: document.getElementById("date").value,
     status: document.getElementById("status").value,
-  };
+  });
 
-  applications.push(application);
   save();
   render();
   form.reset();
 });
 
-render();
-searchInput.addEventListener("input", render);
-filterSelect.addEventListener("change", render);
 // Demo data for first-time visitors
 function daysAgo(n) {
   const d = new Date();
@@ -167,3 +205,8 @@ document.getElementById("load-sample").addEventListener("click", function () {
   save();
   render();
 });
+
+searchInput.addEventListener("input", render);
+filterSelect.addEventListener("change", render);
+
+render();
