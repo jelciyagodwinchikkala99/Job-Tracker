@@ -1,5 +1,3 @@
-# Job-Tracker
-Dashboard to track job applications and their status
 # Job Application Tracker
 
 A dashboard to track job applications and their status (Applied, Interview, Offer, Rejected), with live stats and a status chart.
